@@ -1,0 +1,23 @@
+/*
+  input.css — Tailwind v4 entry point
+  In v4, configuration is done here in CSS using @theme,
+  NOT in a separate tailwind.config.js file.
+  Run: npx @tailwindcss/cli -i ./input.css -o ./dist/output.css --watch
+*/
+
+@import "tailwindcss";
+
+@theme {
+  /* Custom colour tokens — use as bg-indigo, text-slate-950, etc. */
+  --color-slate-950: #020617;
+
+  /* App-specific background shades */
+  --color-app-base: #0f172a;
+  --color-app-topbar: #0b1120;
+  --color-app-card: #111827;
+  --color-app-deep: #0a0f1a;
+
+  /* Custom fonts */
+  --font-sans: "DM Sans", sans-serif;
+  --font-mono: "Space Mono", monospace;
+}

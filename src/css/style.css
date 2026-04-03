@@ -1,0 +1,210 @@
+/*
+  style.css — QueryVault
+  Only contains what Tailwind v4 utility classes can't express:
+  · Method badge colours (GET/POST/DEL/PUT)
+  · Page/tab active states
+  · Sidebar active state
+  · JSON syntax highlighting tokens
+  · Rate limit bar animation
+  Everything layout/spacing/colour is Tailwind in index.html.
+*/
+
+/* ── Method badges ── */
+.method-badge {
+  font-family: "Space Mono", monospace;
+  font-size: 7px;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 2px;
+  min-width: 28px;
+  text-align: center;
+  display: inline-block;
+}
+.method-badge.get {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+}
+.method-badge.post {
+  background: rgba(251, 191, 36, 0.12);
+  color: #fbbf24;
+}
+.method-badge.del {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+}
+.method-badge.put {
+  background: rgba(99, 102, 241, 0.15);
+  color: #a5b4fc;
+}
+
+/* ── Page tab active state ── */
+.ptab {
+  color: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+}
+.ptab.active {
+  background: rgba(99, 102, 241, 0.12);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+.ptab:hover:not(.active) {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ── Endpoint sub-tab active state ── */
+.eptab {
+  color: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+}
+.eptab.active {
+  background: rgba(99, 102, 241, 0.1);
+  color: #a5b4fc;
+  border-color: rgba(99, 102, 241, 0.2);
+}
+.eptab:hover:not(.active) {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ── Sidebar item active state ── */
+.sb-item.active,
+.sb-ep-item.active {
+  color: #a5b4fc;
+  background: rgba(99, 102, 241, 0.08);
+  border-left-color: #6366f1;
+}
+
+/* ── JSON syntax colours ── */
+.json-key {
+  color: #a5b4fc;
+}
+.json-str {
+  color: #4ade80;
+}
+.json-num {
+  color: #fbbf24;
+}
+.json-bool {
+  color: #f87171;
+}
+.json-null {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Try-it response box ── */
+.resp-box {
+  background: #0a0f1a;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-family: "Space Mono", monospace;
+  font-size: 9px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ── Status badge ── */
+.status-200 {
+  background: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+}
+.status-201 {
+  background: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+}
+.status-204 {
+  background: rgba(99, 102, 241, 0.12);
+  color: #a5b4fc;
+}
+.status-404 {
+  background: rgba(251, 191, 36, 0.12);
+  color: #fbbf24;
+}
+.status-429 {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+}
+.status-500 {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+}
+
+/* ── Rate limit bar pulse when near limit ── */
+@keyframes pulse-red {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+.rl-bar.danger {
+  animation: pulse-red 1.5s ease-in-out infinite;
+}
+
+/* ── Copy button flash ── */
+.copy-btn.copied {
+  color: #4ade80;
+  border-color: rgba(74, 222, 128, 0.3);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SCROLL REVEAL ANIMATIONS  (Devfolio-style)
+   ═══════════════════════════════════════════════════════════ */
+
+/* --- Base hidden state --- */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+/* --- Variants (override transform only) --- */
+.reveal-fade {
+  opacity: 0;
+  transform: none;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.92) translateY(16px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-28px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(28px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+/* --- Revealed state (applied by JS) --- */
+.revealed {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* --- Stagger delays for children --- */
+.reveal-d1 { transition-delay: 0.08s; }
+.reveal-d2 { transition-delay: 0.16s; }
+.reveal-d3 { transition-delay: 0.24s; }
+.reveal-d4 { transition-delay: 0.32s; }
+.reveal-d5 { transition-delay: 0.40s; }
+.reveal-d6 { transition-delay: 0.48s; }
+.reveal-d7 { transition-delay: 0.56s; }
+.reveal-d8 { transition-delay: 0.64s; }

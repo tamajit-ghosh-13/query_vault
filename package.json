@@ -1,0 +1,16 @@
+{
+  "name": "queryvault",
+  "version": "1.0.0",
+  "description": "QueryVault — Mock REST API Explorer",
+  "scripts": {
+    "build": "tailwindcss -i ./src/css/input.css -o ./dist/output.css",
+    "dev": "concurrently \"tailwindcss -i ./src/css/input.css -o ./dist/output.css --watch\" \"serve . -l 3010\"",
+    "serve": "serve . -l 3010"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.0.0",
+    "tailwindcss": "^4.0.0",
+    "concurrently": "^9.0.0",
+    "serve": "^14.0.0"
+  }
+}
