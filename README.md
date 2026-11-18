@@ -1,33 +1,54 @@
-# Agrumea Farm — Next.js + React + Three.js + GSAP + Matter.js
+# Agrumea Farm — Next.js 14 + React 18 + Express + PostgreSQL E-Commerce
 
-Scalable component-based architecture for the **Agrumea Farm** (*Dispensa Siciliana*) website inside `/Users/tamajitghosh/Desktop/Frontend`.
+Scalable full-stack e-commerce web application for **Agrumea Farm** (*Dispensa Siciliana*), featuring a modern Next.js 14 App Router frontend paired with an Express.js and Prisma ORM PostgreSQL backend.
 
-## Tech Stack & Component Architecture
+## Tech Stack & Architecture
 
-- **Next.js (App Router) & React 18**:
-  - `src/app/layout.jsx` — Root layout & metadata.
-  - `src/app/page.jsx` — Main application state, GSAP cursor follower (`gsap.quickTo`), and GSAP burgundy curtain page transitions.
-  - `src/app/dispensa/[slug]/page.jsx` — Dynamic product route for `/dispensa/gelsi-neri`, `/dispensa/fragole-bacche`, `/dispensa/pere-cannella`, etc.
-  - `src/app/globals.css` — Global design tokens and layout styles.
-- **Three.js (`src/components/ThreeJarCanvas.jsx`)**:
-  - Real WebGL 3D cylindrical glass jar mesh hierarchy (`THREE.Scene`, `THREE.PerspectiveCamera`, `THREE.WebGLRenderer`, inner preserve core, `THREE.MeshPhysicalMaterial` clearcoated glass cylinder, 360° wraparound `THREE.CanvasTexture` label mesh showing both front brand artwork and back `240g` nutritional facts, and brushed metallic silver lid) animated with GSAP.
-- **Matter.js + GSAP (`src/components/PhysicsPreloader.jsx`)**:
-  - 2D rigid-body physics engine (`Matter.Engine`, `Matter.World`, `Matter.Bodies`) simulating falling Sicilian fruit & vegetable silhouettes while a GSAP timeline drives the `0%`–`100%` counter and orange curtain reveal.
-- **GSAP Motion & Interactive Views**:
-  - `src/components/OrbitalCarousel.jsx` — Orbital 3D jar showcase above the rotating decagonal burgundy wheel (`WE PRESERVE ◆ WE GROW`).
-  - `src/components/ProductDetail.jsx` — Clipped title reveal, scroll-linked floating/tilting 3D jar, 3-column specifications bar, GSAP momentum-draggable gallery, and 4-card *The Other Products* grid.
-  - `src/components/Header.jsx` & `src/components/Footer.jsx` — Bilingual (`IT` / `EN`) navigation bar, full-screen drawer, and editorial burgundy footer.
-  - `src/data/products.js` & `src/utils/jarTextureGenerator.js` — Bilingual catalog and procedural texture generator.
+- **Frontend Core (Next.js 14 & React 18)**:
+  - `src/app/layout.jsx` — Root layout, metadata management, and global `StoreProvider` context wrapping.
+  - `src/app/page.jsx` — Editorial home showcase, interactive carousel, and view state coordination.
+  - `src/app/dispensa/[slug]/page.jsx` — Dynamic product routes with server-side static parameter generation (`generateStaticParams`).
+  - `src/app/shop/page.jsx` — Product catalog with client-side category filtering, sorting, and responsive grid layouts.
+  - `src/app/cart/page.jsx` & `src/app/checkout/page.jsx` — Full checkout pipeline with multi-item cart management and promotional code calculations.
+  - `src/app/login/page.jsx` — User authentication and registration interface.
+- **State Management & Data Layer**:
+  - `src/context/StoreContext.jsx` — Centralized React Context providing cart mutations, bilingual localization (`EN` / `IT`), and persistent synchronization to `localStorage` with offline resilience.
+  - `src/data/products.js` — Structured catalog data with localized organoleptic profiles, ingredients, and shelf-life metadata.
+- **Backend Architecture (`server/`)**:
+  - **Runtime & API:** Node.js + Express.js REST API with modular controllers, input validation middleware, and global error handling.
+  - **Database & ORM:** PostgreSQL managed via Prisma ORM with normalized relations (`User`, `Product`, `Cart`, `CartItem`, `Order`, `OrderItem`).
+  - **Security:** HTTP-only cookie-based JWT sessions, bcrypt password hashing, and configurable CORS policies.
 
 ## Getting Started
 
-1. **Next.js Development Server**:
-   ```bash
-   cd /Users/tamajitghosh/Desktop/Frontend
-   npm install
-   npm run dev
-   ```
-   Open `http://localhost:3000`.
+### 1. Frontend (Next.js)
+```bash
+# Install dependencies
+npm install
 
-2. **Instant Zero-Install Preview**:
-   `index.html` is also preserved in the root folder so you can preview the site immediately without waiting for `npm install`.
+# Start development server
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### 2. Backend (Express & PostgreSQL)
+```bash
+cd server
+npm install
+
+# Push Prisma schema to PostgreSQL & seed catalog data
+npm run db:push
+npm run db:seed
+
+# Start backend server
+npm start
+```
+API runs on [http://localhost:4000](http://localhost:4000).
+
+## Production Build
+
+```bash
+npm run build
+npm run start
+```
+Verified for zero-configuration deployment on Vercel.

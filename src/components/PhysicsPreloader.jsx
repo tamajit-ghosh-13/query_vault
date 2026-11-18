@@ -1,18 +1,14 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import Matter from 'matter-js';
 import gsap from 'gsap';
-import { drawFruitSilhouette } from '@/utils/jarTextureGenerator';
 
 /**
- * PhysicsPreloader — Matter.js 2D Rigid-Body Physics + GSAP Curtain Wipe Preloader (00:00 - 00:03)
- * Uses Matter.Engine, Matter.World, and Matter.Bodies to simulate falling Sicilian
- * fruits & vegetables while GSAP animates the 0% -> 100% counter and orange curtain reveal.
+ * Editorial Page Preloader
+ * High-performance Next.js page reveal with animated typography counter (0% -> 100%)
+ * and smooth curtain wipe. Zero heavy physics engine overhead.
  */
 export default function PhysicsPreloader({ runTrigger = 0, onComplete }) {
-  const containerRef = useRef(null);
-  const canvasRef = useRef(null);
   const curtainRef = useRef(null);
   const [percent, setPercent] = useState(0);
   const [visible, setVisible] = useState(true);
@@ -21,71 +17,13 @@ export default function PhysicsPreloader({ runTrigger = 0, onComplete }) {
     setVisible(true);
     setPercent(0);
 
-    const canvas = canvasRef.current;
     const curtain = curtainRef.current;
-    if (!canvas || !curtain) return;
+    if (!curtain) return;
 
-    const ctx = canvas.getContext('2d');
-    const W = (canvas.width = window.innerWidth);
-    const H = (canvas.height = window.innerHeight);
+    // Reset curtain position
+    gsap.set(curtain, { yPercent: 0, autoAlpha: 1 });
 
-    // 1. Initialize Matter.js Physics Engine & World
-    const engine = Matter.Engine.create({
-      gravity: { x: 0, y: 1.35, scale: 0.001 }
-    });
-    const world = engine.world;
-
-    // Static boundaries (floor, left wall, right wall)
-    const wallThickness = 120;
-    const floor = Matter.Bodies.rectangle(W / 2, H + wallThickness / 2 - 10, W + 400, wallThickness, {
-      isStatic: true,
-      restitution: 0.35,
-      friction: 0.4
-    });
-    const leftWall = Matter.Bodies.rectangle(-wallThickness / 2, H / 2, wallThickness, H * 3, {
-      isStatic: true
-    });
-    const rightWall = Matter.Bodies.rectangle(W + wallThickness / 2, H / 2, wallThickness, H * 3, {
-      isStatic: true
-    });
-    Matter.World.add(world, [floor, leftWall, rightWall]);
-
-    // 2. Spawn 18 Matter.js rigid-body fruit & vegetable shapes
-    const fruitSpecs = [
-      { type: 'tomato', color: '#7D1418', r: 95 },
-      { type: 'orange', color: '#DF5314', r: 88 },
-      { type: 'strawberry', color: '#D91B24', r: 78 },
-      { type: 'pear', color: '#641C34', r: 92 },
-      { type: 'orange', color: '#1F5A34', r: 86 },
-      { type: 'lemon', color: '#F4C813', r: 82 },
-      { type: 'eggplant', color: '#4B1D52', r: 105 },
-      { type: 'orange', color: '#E47B1B', r: 74 },
-      { type: 'mulberry', color: '#1A1B3A', r: 72 },
-      { type: 'pear', color: '#3A4E18', r: 90 },
-      { type: 'lemon', color: '#6E3219', r: 64 }
-    ];
-
-    const scale = Math.min(1.15, Math.max(0.72, W / 1400));
-    const fruitBodies = fruitSpecs.concat(fruitSpecs.slice(0, 7)).map((spec, i) => {
-      const radius = spec.r * scale;
-      const x = W * 0.1 + ((i * 179) % (W * 0.8));
-      const y = -120 - i * 65;
-      const body = Matter.Bodies.circle(x, y, radius * 0.76, {
-        restitution: 0.38,
-        friction: 0.25,
-        frictionAir: 0.008,
-        angle: (i * 0.65) % (Math.PI * 2)
-      });
-      body.fruitMeta = { type: spec.type, color: spec.color, r: radius };
-      return body;
-    });
-
-    Matter.World.add(world, fruitBodies);
-
-    // 3. GSAP Timeline for 0% -> 100% Counter & Orange Curtain Wipe
-    gsap.set(curtain, { y: 0, yPercent: 101 });
-    const counterObj = { val: 0 };
-
+    const obj = { val: 0 };
     const tl = gsap.timeline({
       onComplete: () => {
         setVisible(false);
@@ -93,58 +31,63 @@ export default function PhysicsPreloader({ runTrigger = 0, onComplete }) {
       }
     });
 
-    tl.to(counterObj, {
+    // 1. Counter tween (0 -> 100)
+    tl.to(obj, {
       val: 100,
-      duration: 2.2,
+      duration: 1.2,
       ease: 'power2.inOut',
-      onUpdate: () => {
-        setPercent(Math.floor(counterObj.val));
-      }
-    })
-      .to(curtain, {
-        y: 0,
-        yPercent: 0,
-        duration: 0.56,
-        ease: 'power4.inOut'
-      })
-      .to(curtain, {
-        y: 0,
-        yPercent: -101,
-        duration: 0.56,
-        ease: 'power4.inOut',
-        delay: 0.08
-      });
+      onUpdate: () => setPercent(Math.floor(obj.val))
+    });
 
-    // 4. Render Loop synced with Matter.Engine.update
-    let rafId;
-    const renderLoop = () => {
-      Matter.Engine.update(engine, 1000 / 60);
-      ctx.clearRect(0, 0, W, H);
+    // 2. Short pause at 100%
+    tl.to({}, { duration: 0.15 });
 
-      fruitBodies.forEach((b) => {
-        const { type, color, r } = b.fruitMeta;
-        drawFruitSilhouette(ctx, type, b.position.x, b.position.y, r, color, b.angle);
-      });
-
-      rafId = requestAnimationFrame(renderLoop);
-    };
-    rafId = requestAnimationFrame(renderLoop);
+    // 3. Smooth upward curtain reveal
+    tl.to(curtain, {
+      yPercent: -100,
+      duration: 0.75,
+      ease: 'expo.inOut'
+    });
 
     return () => {
-      cancelAnimationFrame(rafId);
       tl.kill();
-      Matter.World.clear(world, false);
-      Matter.Engine.clear(engine);
     };
-  }, [runTrigger]);
+  }, [runTrigger, onComplete]);
 
   if (!visible) return null;
 
   return (
-    <div ref={containerRef} className="preloader">
-      <canvas ref={canvasRef} id="preloader-canvas" />
-      <div className="preloader-counter">{percent}%</div>
-      <div ref={curtainRef} className="preloader-curtain" />
+    <div
+      ref={curtainRef}
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-between bg-[#C85028] text-[#FAF4EA] px-8 py-12 pointer-events-auto select-none"
+    >
+      {/* Top Brand Header */}
+      <div className="w-full max-w-6xl flex items-center justify-between text-xs tracking-[0.25em] uppercase font-semibold text-[#FAF4EA]/80">
+        <span>Agrumea Farm</span>
+        <span>Dispensa Siciliana</span>
+      </div>
+
+      {/* Center Counter */}
+      <div className="flex flex-col items-center justify-center text-center">
+        <span className="font-serif italic text-lg text-[#FAF4EA]/75 tracking-wider mb-2">
+          Caricamento
+        </span>
+        <div className="font-mono text-8xl md:text-9xl font-bold tracking-tight">
+          {percent}%
+        </div>
+        <div className="w-48 h-[2px] bg-white/20 mt-6 overflow-hidden rounded-full">
+          <div
+            className="h-full bg-white transition-all duration-75 ease-out"
+            style={{ width: `${percent}%` }}
+          />
+        </div>
+      </div>
+
+      {/* Footer Tagline */}
+      <div className="w-full max-w-6xl flex items-center justify-between text-[11px] tracking-[0.2em] uppercase text-[#FAF4EA]/60">
+        <span>Artisanal Conserves</span>
+        <span>Made in Sicily &middot; Italy</span>
+      </div>
     </div>
   );
 }

@@ -2,7 +2,7 @@
   "name": "agrumea-farm-nextjs",
   "version": "2.0.0",
   "private": true,
-  "description": "Agrumea Farm — Scalable Next.js + React + Three.js + GSAP + Matter.js Web Application",
+  "description": "Agrumea Farm — Full-Stack Next.js 14 + React 18 + Express + PostgreSQL E-Commerce Web Application",
   "scripts": {
     "dev": "rm -rf .next && next dev",
     "build": "next build",
