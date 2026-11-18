@@ -1,0 +1,27 @@
+{
+  "name": "agrumea-farm-nextjs",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Agrumea Farm — Scalable Next.js + React + Three.js + GSAP + Matter.js Web Application",
+  "scripts": {
+    "dev": "rm -rf .next && next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "preview:static": "python3 -m http.server 8080"
+  },
+  "browserslist": [
+    "defaults",
+    "not IE 11"
+  ],
+  "dependencies": {
+    "@react-three/drei": "^9.114.0",
+    "@react-three/fiber": "^8.17.10",
+    "gsap": "^3.12.5",
+    "matter-js": "^0.20.0",
+    "next": "^14.2.15",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "three": "^0.169.0"
+  }
+}

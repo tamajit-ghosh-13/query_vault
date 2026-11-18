@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  memberSince  String   @default("2026")
+  location     String   @default("Sicily, Italy")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  cart         CartItem[]
+  orders       Order[]
+}
+
+model CartItem {
+  id        String  @id @default(cuid())
+  userId    String
+  productId String
+  weight    String  @default("240g")
+  quantity  Int     @default(1)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([userId, productId, weight])
+}
+
+model Order {
+  id        String      @id @default(cuid())
+  userId    String
+  items     Json
+  subtotal  Float
+  discount  Float       @default(0)
+  shipping  Float       @default(0)
+  total     Float
+  promoCode String?
+  status    OrderStatus @default(PENDING)
+  createdAt DateTime    @default(now())
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model Product {
+  id           String  @id
+  jarMainTitle String
+  slug         String  @unique
+  variety      String?
+  origin       String?
+  price240g    Float?
+  price380g    Float?
+  price580g    Float?
+  inStock      Boolean @default(true)
+  category     String?
+}

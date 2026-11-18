@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agrumea Farm — Dispensa Siciliana</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <!-- Top Accent Bar -->
+  <div class="top-accent-bar"></div>
+
+  <!-- Preloader Overlay (00:00 - 00:03) -->
+  <div id="preloader" class="preloader">
+    <canvas id="preloader-canvas"></canvas>
+    <div class="preloader-counter" id="preloader-counter">0%</div>
+    <div class="preloader-curtain" id="preloader-curtain"></div>
+  </div>
+
+  <!-- Page Transition Curtain (Burgundy / Orange Wipe) -->
+  <div id="transition-curtain" class="transition-curtain"></div>
+
+  <!-- Custom Floating Cursor Pill (DISCOVER THE PRODUCT / DRAG) -->
+  <div id="cursor-pill" class="cursor-pill" aria-hidden="true">
+    <span class="cursor-pill-dot"></span>
+    <span id="cursor-pill-text" class="cursor-pill-text">DISCOVER THE PRODUCT</span>
+  </div>
+
+  <!-- Browser Bottom-Left Link Preview (Matches Video 00:17, 00:37, 00:57) -->
+  <div id="url-preview" class="url-preview" aria-hidden="true"></div>
+
+  <!-- Fixed Header Navigation -->
+  <header class="site-header" id="site-header">
+    <div class="header-left">
+      <button class="lang-btn" id="lang-it" data-lang="it" aria-label="Switch to Italian">IT</button>
+      <button class="lang-btn active" id="lang-en" data-lang="en" aria-label="Switch to English">EN</button>
+    </div>
+
+    <a href="#home" class="brand-logo" id="brand-logo" aria-label="Agrumea Farm Home">
+      <svg class="brand-emblem" viewBox="0 0 120 48" fill="none">
+        <!-- Sun & Sicilian Horizon Arch -->
+        <path d="M18 42 C38 26, 82 26, 102 42" stroke="#DF3D14" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M28 44 C46 33, 74 33, 92 44" stroke="#DF3D14" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+        <!-- Orange Tree Crown -->
+        <path d="M60 8 C49 8, 43 15, 45 23 C41 25, 43 32, 50 32 L70 32 C77 32, 79 25, 75 23 C77 15, 71 8, 60 8 Z" fill="#DF3D14"/>
+        <!-- Tree Trunk -->
+        <path d="M58 31 L57 38 L63 38 L62 31 Z" fill="#3B1D1A"/>
+        <!-- Tiny Citrus Fruits in Crown -->
+        <circle cx="53" cy="17" r="2.2" fill="#FBF3E8"/>
+        <circle cx="65" cy="15" r="2.2" fill="#FBF3E8"/>
+        <circle cx="59" cy="23" r="2.2" fill="#FBF3E8"/>
+        <circle cx="49" cy="26" r="1.8" fill="#FBF3E8"/>
+        <circle cx="69" cy="25" r="1.8" fill="#FBF3E8"/>
+      </svg>
+      <span class="brand-title">AGRUMEA</span>
+      <span class="brand-subtitle">Farm</span>
+    </a>
+
+    <div class="header-right">
+      <button class="menu-pill-btn" id="menu-toggle-btn">
+        <span id="menu-btn-label">MENU</span>
+      </button>
+      <button class="menu-plus-btn" id="menu-plus-btn" aria-label="Toggle Menu">
+        <span class="plus-icon">+</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Fullscreen Editorial Menu Overlay -->
+  <div id="menu-drawer" class="menu-drawer" aria-hidden="true">
+    <div class="menu-drawer-inner">
+      <div class="menu-drawer-col">
+        <span class="menu-eyebrow" data-i18n="navigation">NAVIGATION</span>
+        <ul class="menu-nav-list">
+          <li><a href="#home" data-nav="home">Dispensa (Pantry)</a></li>
+          <li><a href="#product-gelsi-neri" data-nav="product" data-product="gelsi-neri">Extra Black Mulberry Jam</a></li>
+          <li><a href="#product-fragole-bacche" data-nav="product" data-product="fragole-bacche">Strawberry &amp; Goji Berry</a></li>
+          <li><a href="#product-pere-cannella" data-nav="product" data-product="pere-cannella">Pear &amp; Cinnamon</a></li>
+          <li><a href="#product-smeralda" data-nav="product" data-product="smeralda">Smeralda Pistachio</a></li>
+          <li><a href="#product-pesto-rosso" data-nav="product" data-product="pesto-rosso">Pesto Rosso Ibleo</a></li>
+          <li><a href="#product-caponata" data-nav="product" data-product="caponata">Sinfonia Barocca Caponata</a></li>
+        </ul>
+      </div>
+      <div class="menu-drawer-col menu-drawer-info">
+        <span class="menu-eyebrow" data-i18n="interactiveControls">INTERACTIVE CONTROLS</span>
+        <p class="menu-desc">Scroll, drag, or use your arrow keys on the pantry wheel to orbit the 3D jars. Click any jar to inspect its Sicilian recipe, nutritional label, and studio gallery.</p>
+        <button class="replay-preloader-btn" id="replay-preloader-btn">Replay Physics Preloader (0:00)</button>
+        <div class="menu-office-block">
+          <h4>AGRUMEA FARM</h4>
+          <p>Via Generale Arimondi, 13 — 95123 Catania (CT)<br/>Contrada Piana S. Croce — 96014 Floridia (SR), Sicily</p>
+          <a href="#contact" class="menu-email">info@agrumeafarm.it</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- VIEW 1: ORBITAL 3D JAR CAROUSEL (HOME / DISPENSA VIEW 00:03 - 00:19)  -->
+  <!-- ===================================================================== -->
+  <main id="home-view" class="home-view active-view">
+    <div class="orbital-stage" id="orbital-stage">
+      <!-- Rotating Decagonal Burgundy Wheel with Curved Text -->
+      <div class="burgundy-wheel-wrap" id="burgundy-wheel-wrap">
+        <svg class="burgundy-wheel-svg" id="burgundy-wheel-svg" viewBox="0 0 1000 1000">
+          <defs>
+            <!-- Rounded Decagon Path -->
+            <path id="text-ring-path" d="M 500, 145 A 355,355 0 1,1 499.9, 145" />
+          </defs>
+          <!-- 10-sided Rounded Polygon Wheel -->
+          <path class="wheel-polygon" d="
+            M 500 30
+            L 776 120
+            L 947 355
+            L 947 645
+            L 776 880
+            L 500 970
+            L 224 880
+            L 53 645
+            L 53 355
+            L 224 120
+            Z"
+            fill="#591C21"
+            stroke="#591C21"
+            stroke-width="48"
+            stroke-linejoin="round"
+          />
+          <text class="wheel-curved-text">
+            <textPath href="#text-ring-path" startOffset="0%">
+              WE PRESERVE &#x25C6; WE GROW &#x25C6; WE PRESERVE &#x25C6; WE GROW &#x25C6;
+            </textPath>
+          </text>
+        </svg>
+      </div>
+
+      <!-- Orbital Jars Container -->
+      <div class="orbital-jars-layer" id="orbital-jars-layer">
+        <!-- Populated dynamically by app.js with 3D Canvas jars -->
+      </div>
+    </div>
+
+    <!-- Bottom HUD on Home View -->
+    <div class="home-bottom-hud">
+      <a href="#privacy" class="privacy-link" id="home-privacy-link" data-i18n="privacyCookies">Privacy &amp; Cookies</a>
+      <div class="scroll-discover-indicator" id="scroll-discover-indicator" data-i18n="scrollToDiscover">SCROLL TO DISCOVER</div>
+      <div class="carousel-nav-Controls">
+        <button class="hud-arrow-btn" id="carousel-prev-btn" aria-label="Previous Product">&larr;</button>
+        <button class="hud-arrow-btn" id="carousel-next-btn" aria-label="Next Product">&rarr;</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- VIEW 2: PRODUCT DETAIL PAGE (00:20 - 00:35, 00:39 - 01:10)            -->
+  <!-- ===================================================================== -->
+  <section id="product-view" class="product-view" aria-hidden="true">
+    <!-- Hero Section with Clipped Title & Scroll-Linked Floating 3D Jar -->
+    <div class="product-hero" id="product-hero">
+      <div class="product-hero-title-wrap">
+        <h1 class="product-hero-title" id="product-hero-title">
+          <span class="title-line-mask"><span class="title-line-inner" id="detail-title-line1">EXTRA BLACK</span></span>
+          <span class="title-line-mask"><span class="title-line-inner" id="detail-title-line2">MULBERRY JAM</span></span>
+        </h1>
+      </div>
+
+      <div class="product-hero-meta-row">
+        <div class="hero-meta-left" id="detail-category">Marmelade<br/>and Jams</div>
+        <div class="hero-meta-right" id="detail-origin">Made in<br/>Sicily - Italy</div>
+      </div>
+
+      <!-- Floating & Tilting 3D Jar Layer that scrolls over the title and into the description -->
+      <div class="detail-floating-jar-stage" id="detail-floating-jar-stage">
+        <div class="detail-jar-transform" id="detail-jar-transform">
+          <canvas id="detail-jar-canvas" width="520" height="680"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Description & Ingredients Block (00:26, 00:42, 01:03) -->
+    <div class="product-description-section">
+      <div class="diamond-sep">&#x25C6;</div>
+      <p class="product-lead-copy" id="detail-description">
+        Intense and deep flavor. Full-bodied, enveloping texture with a brilliant deep purple color.
+      </p>
+      <p class="product-ingredients-copy" id="detail-ingredients">
+        Ingredients: Black Mulberry, sugar, lemon juice, gelling agent: pectin.
+      </p>
+      <div class="diamond-sep">&#x25C6;</div>
+    </div>
+
+    <!-- 3-Column Specifications Table (00:27, 00:43, 01:04) -->
+    <div class="product-specs-container">
+      <div class="product-specs-grid">
+        <div class="spec-col spec-col-tips">
+          <h3 class="spec-heading" id="spec-heading-tips">USEFUL TIPS</h3>
+          <p class="spec-body" id="detail-tips">
+            Excellent with aged pecorino and blue cheeses. Keep away from heat sources and direct sunlight. After opening, store in the refrigerator and consume within 3-4 days.
+          </p>
+        </div>
+        <div class="spec-col spec-col-weights">
+          <h3 class="spec-heading" id="spec-heading-weights">AVAILABLE WEIGHTS</h3>
+          <div class="weights-badges" id="detail-weights">
+            <span class="weight-circle">240g</span>
+            <span class="weight-circle">1.2kg</span>
+          </div>
+        </div>
+        <div class="spec-col spec-col-shelf">
+          <h3 class="spec-heading" id="spec-heading-shelf">SHELF LIFE</h3>
+          <p class="spec-body spec-shelf-value" id="detail-shelf">36 months</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Horizontal Draggable Lifestyle Gallery (00:29 - 00:34, 00:44 - 00:54) -->
+    <div class="gallery-section" id="gallery-section">
+      <div class="gallery-track-Viewport" id="gallery-viewport">
+        <div class="gallery-track" id="gallery-track">
+          <!-- Populated dynamically with high-craft studio/lifestyle Canvas scenes -->
+        </div>
+      </div>
+    </div>
+
+    <!-- THE OTHER PRODUCTS 4-Card Interactive Grid (00:55 - 01:00, 01:05) -->
+    <div class="other-products-section">
+      <h2 class="other-products-title" id="other-products-title">
+        THE OTHER<br/>PRODUCTS
+      </h2>
+      <div class="other-products-grid" id="other-products-grid">
+        <!-- Populated dynamically with 4 interactive cards + animated fruit silhouettes -->
+      </div>
+    </div>
+
+    <!-- Deep Burgundy Editorial Footer (01:06 - 01:10) -->
+    <footer class="site-footer">
+      <div class="footer-brand-giant">
+        <span class="footer-giant-agrumea">AGRUMEA</span>
+        <span class="footer-giant-farm">Farm</span>
+      </div>
+
+      <div class="footer-columns">
+        <!-- Col 1: Sicilian Farmer Line Art & Legal -->
+        <div class="footer-col footer-col-legal">
+          <div class="footer-farmer-illustration">
+            <svg viewBox="0 0 90 95" width="68" height="72" fill="none">
+              <!-- Sicilian Coppola / Hat -->
+              <path d="M26 24 C26 14, 64 14, 64 24 C69 24, 72 27, 68 29 L22 29 C18 27, 21 24, 26 24 Z" stroke="#DF3D14" stroke-width="2" fill="none"/>
+              <!-- Head & Mustache -->
+              <circle cx="45" cy="36" r="9" stroke="#DF3D14" stroke-width="2" fill="none"/>
+              <path d="M39 39 Q45 36 51 39" stroke="#DF3D14" stroke-width="1.8" fill="none"/>
+              <!-- Shoulders & Arms Holding Harvest Basket -->
+              <path d="M22 68 C22 50, 68 50, 68 68" stroke="#DF3D14" stroke-width="2" fill="none"/>
+              <!-- Basket of Oranges -->
+              <path d="M27 66 L63 66 L57 82 L33 82 Z" stroke="#DF3D14" stroke-width="2" fill="none"/>
+              <circle cx="37" cy="62" r="4" stroke="#DF3D14" stroke-width="1.6"/>
+              <circle cx="45" cy="60" r="4.5" stroke="#DF3D14" stroke-width="1.6"/>
+              <circle cx="53" cy="62" r="4" stroke="#DF3D14" stroke-width="1.6"/>
+              <circle cx="41" cy="56" r="3.5" stroke="#DF3D14" stroke-width="1.6"/>
+              <circle cx="49" cy="56" r="3.5" stroke="#DF3D14" stroke-width="1.6"/>
+            </svg>
+          </div>
+          <div class="footer-copyright">
+            <p class="copyright-orange">&copy;2026 | AGRUMEA FARM</p>
+            <p>Azienda Agricola Sebastiano Piazza</p>
+            <p class="vat-number">VAT IT01980440894</p>
+          </div>
+        </div>
+
+        <!-- Col 2: Navigation Links -->
+        <div class="footer-col footer-col-nav">
+          <ul class="footer-links-primary">
+            <li><a href="#home" data-nav="home">Home</a></li>
+            <li><a href="#home" data-nav="home">Production</a></li>
+            <li><a href="#home" data-nav="home">Experience</a></li>
+            <li><a href="#home" data-nav="home">About</a></li>
+          </ul>
+          <ul class="footer-links-secondary">
+            <li><a href="#contact">Contacts</a></li>
+            <li><a href="#home" data-nav="home">Shop</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Offices -->
+        <div class="footer-col footer-col-offices">
+          <div class="office-group">
+            <h4 class="footer-label">REGISTERED OFFICE</h4>
+            <p>Via Generale Arimondi, 13</p>
+            <p>95123 - Catania</p>
+          </div>
+          <div class="office-group">
+            <h4 class="footer-label">OPERATIONAL OFFICE</h4>
+            <p>Seconda strada c.da piana s. Croce sn</p>
+            <p>96014 - Floridia (SR)</p>
+          </div>
+        </div>
+
+        <!-- Col 4: Social & Contact -->
+        <div class="footer-col footer-col-contact">
+          <div class="follow-group">
+            <h4 class="footer-label">FOLLOW US</h4>
+            <a href="#instagram" class="instagram-link">@Instagram</a>
+          </div>
+          <div class="inquiry-group">
+            <p>Do you have a question or would you like to find out more about us? Drop us a line, we'd be delighted to tell you all about Agrumea Farm.</p>
+            <a href="#contact" class="footer-mailto">info@agrumeafarm.it</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar">
+        <a href="#privacy" class="footer-privacy-link">Privacy &amp; Cookies</a>
+        <span class="footer-studio-credit">Designed by Studio K95</span>
+      </div>
+    </footer>
+  </section>
+
+  <script src="./data.js"></script>
+  <script src="./jarRenderer.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
